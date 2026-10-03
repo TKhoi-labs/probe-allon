@@ -4,6 +4,13 @@
 # Install the app once per organisation; it then reads this file in every
 # repository. Because these settings are a file, a template sync PR also
 # propagates label and branch-protection changes across the fleet.
+#
+# Verified 2026-10-03: the app applies `repository:` and `labels:` but NOT
+# `branches:`, and nothing reports that. This block is correct — the app's own
+# documentation describes this syntax, and the request succeeds when replayed by
+# hand — so keep it, and apply protection yourself until the app is fixed. The
+# same applies to installing the app at all: it has no installation handler, so
+# it does nothing to existing repositories until something pushes this file.
 ---
 repository:
   name: probe-allon
@@ -24,7 +31,13 @@ branches:
       required_pull_request_reviews:
         required_approving_review_count: 2
         dismiss_stale_reviews: true
-      required_status_checks: null
+      # The name is "<workflow> / <job>" from the shared reusable workflow, which
+      # uses `ci` for both. If the organisation renames it there, this check never
+      # reports and every pull request waits forever — adjust it to match.
+      required_status_checks:
+        strict: false
+        contexts:
+          - ci / ci
       enforce_admins: false
       restrictions: null
 
