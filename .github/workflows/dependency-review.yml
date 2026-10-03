@@ -1,0 +1,30 @@
+---
+# Dependency review is free on public repositories. On private ones it needs
+# GitHub Advanced Security; without that entitlement the action errors, so the
+# job skips instead of failing the build (ADR-0008).
+name: dependency-review
+
+on:
+  pull_request:
+
+concurrency:
+  group: dependency-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read # read the dependency manifests being changed
+
+jobs:
+  dependency-review:
+    name: Review dependency changes
+    runs-on: ubuntu-latest
+    # Public repositories always have it; private ones must opt in.
+    if: ${{ !github.event.repository.private || vars.GHAS_ENABLED == 'true' }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48 # v4
+        with:
+          fail-on-severity: high

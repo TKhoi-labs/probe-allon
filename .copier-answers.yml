@@ -1,0 +1,23 @@
+---
+# Changes here will be overwritten by Copier.
+# This file is the module manifest that `just health` reads.
+_commit: v0.1.1
+_src_path: gh:TKhoi-labs/repo-template
+codeowners_team: '@TKhoi-labs/maintainers'
+copyright_holder: TKhoi-labs
+description: ''
+license: MIT
+license_year: 2026
+module_ci: true
+module_commits: true
+module_contributing: true
+module_deps: true
+module_docs: true
+module_env: true
+module_ops: true
+module_release: true
+module_security: true
+org_slug: TKhoi-labs
+project_name: probe-allon
+project_slug: probe-allon
+workflow_ref: 19f45b68e4ca46d42d881caee72f998f353ccaaf

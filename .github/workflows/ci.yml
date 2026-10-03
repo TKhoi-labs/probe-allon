@@ -1,0 +1,20 @@
+---
+# CI is a thin caller: the workflow body lives in the shared org .github
+# repository, so changing CI does not mean editing every repository (ADR-0003).
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    # The called workflow receives the automatic token, scoped by the
+    # `permissions:` above. Do not add `secrets: inherit`: that hands every
+    # secret in this repository to the shared workflow. Declare the specific
+    # secrets it needs under a `secrets:` key here instead.
+    uses: TKhoi-labs/.github/.github/workflows/ci.yml@19f45b68e4ca46d42d881caee72f998f353ccaaf

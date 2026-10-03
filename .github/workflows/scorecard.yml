@@ -1,0 +1,62 @@
+---
+# OpenSSF Scorecard: machine-readable repository posture. Run on a schedule
+# rather than per-push, because it scores the repository, not the change.
+#
+# PUBLISHING RESTRICTIONS — violating any of these makes the run FAIL, not warn,
+# because the OpenSSF API rejects results from a non-conforming workflow:
+#   * no workflow-level env or defaults
+#   * no workflow-level write permissions (hence `permissions: {}` below)
+#   * only the job running ossf/scorecard-action may use `id-token: write`
+#   * in that job: no env or defaults, no containers or services, Ubuntu runner,
+#     and only these actions: actions/checkout, actions/upload-artifact,
+#     github/codeql-action/upload-sarif, ossf/scorecard-action,
+#     step-security/harden-runner
+# Adding an innocent-looking extra step to that job can break publishing.
+name: scorecard
+
+on:
+  branch_protection_rule:
+  schedule:
+    - cron: "30 1 * * 6"
+  push:
+    branches: [main]
+
+# A posture scan is slow; never cancel one mid-run.
+concurrency:
+  group: scorecard-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions: {} # the job below declares exactly what it needs
+
+jobs:
+  analysis:
+    name: Scorecard analysis
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read # read the repository contents
+      actions: read # read workflow metadata
+      # The three reads below are what a private repository needs to query
+      # commits and detect configured SAST tools. Without them, private repos
+      # fail with "Resource not accessible by integration" (GraphQL ListCommits).
+      issues: read
+      pull-requests: read
+      checks: read
+      security-events: write # upload the SARIF result
+      id-token: write # publish results to the OpenSSF API
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - uses: ossf/scorecard-action@2d1146689b8cda280b9bc96326124645441f03bc # v2.4.4
+        with:
+          results_file: results.sarif
+          results_format: sarif
+          # Publishing feeds the OpenSSF public dataset and enables the badge;
+          # it is only meaningful for public repositories. Private repositories
+          # can still run the analysis and upload SARIF.
+          publish_results: ${{ !github.event.repository.private }}
+
+      - uses: github/codeql-action/upload-sarif@1190a975f95ce23525efb6a3fc21ea29567c1b52 # v3
+        with:
+          sarif_file: results.sarif
