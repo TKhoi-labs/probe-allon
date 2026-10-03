@@ -11,3 +11,5 @@ No description was provided at generation time.
 1. Replace this README with something that tells a reader what this repo is for.
 2. Run `just health` and resolve every module it reports as incomplete.
 3. Resolve every `TODO` row in `docs/adr/0001-initial-deferrals.md`.
+
+<!-- probe: exercise PR-time workflows -->
