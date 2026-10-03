@@ -1,7 +1,7 @@
 ---
 # Changes here will be overwritten by Copier.
 # This file is the module manifest that `just health` reads.
-_commit: v0.3.2
+_commit: v0.3.3
 _src_path: gh:TKhoi-labs/repo-template
 codeowners_team: '@TKhoi-labs/maintainers'
 copyright_holder: TKhoi-labs
