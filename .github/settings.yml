@@ -53,7 +53,7 @@ labels:
     description: "Conventional Comments: blocking issue"
   - name: nitpick
     color: fef2c0
-    description: "Conventional Comments: non-blocking nitpick"
+    description: "Conventional Comments: non-blocking nitpick (sync check)"
   - name: praise
     color: 5319e7
     description: "Conventional Comments: praise"
