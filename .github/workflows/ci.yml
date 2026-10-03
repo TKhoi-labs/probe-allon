@@ -17,4 +17,4 @@ jobs:
     # `permissions:` above. Do not add `secrets: inherit`: that hands every
     # secret in this repository to the shared workflow. Declare the specific
     # secrets it needs under a `secrets:` key here instead.
-    uses: TKhoi-labs/.github/.github/workflows/ci.yml@19f45b68e4ca46d42d881caee72f998f353ccaaf
+    uses: TKhoi-labs/.github/.github/workflows/ci.yml@a58db51b34c18a01397838acdd4e9d6ac93f5f32
