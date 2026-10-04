@@ -41,20 +41,26 @@ Unknown owner on line 2: make sure the team @<org>/<team> exists, is publicly vi
 and has write access to the repository
 ```
 
-So that team must exist **before** this file means anything, it must be visible to the
+So that owner must exist **before** this file means anything, it must be visible to the
 repository, and it must have write access. Until then, GitHub reports the repository as having
 a broken CODEOWNERS file, and a branch protection rule requiring code owner review can block
 every pull request.
 
-If you are not ready to maintain a team, point CODEOWNERS at the organisation itself
-(the `@<org>` handle is always a valid owner) or delete the file. An owner that does not exist
-is worse than no owner, because it makes the file invalid rather than merely advisory.
+An owner must be a user with write access (`@username`) or a visible team with write access
+(`@org/team-name`); an organisation handle on its own is not a valid owner. If that owner stops
+existing, delete the file: an owner that does not exist is worse than no owner, because it
+makes the file invalid rather than merely advisory.
+
 
 ## Generated files
 
 Files generated from the repository template are never hand-edited: the next template sync
 would conflict with the edit. Keep customisations in files no module owns. A failed sync is
 the intended outcome when a repository has diverged.
+
+The sync never deletes files either. Turning a module off, or clearing an answer that used to
+generate a file, stops that file being rendered and leaves the existing one in place — remove
+it yourself, in the same commit.
 
 ## Decisions
 
