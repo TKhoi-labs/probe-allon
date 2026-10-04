@@ -9,6 +9,14 @@ health:
 # Run every local check before pushing.
 check: health
 
+# Leave the template: drop the sync, the module health report and the answers
+# file. A dry run by default; `just eject -- --yes` applies it.
+#
+# `{{args}}` is a `just` variable, not a Copier one: this file is rendered by
+# Jinja, so the braces have to be escaped to survive it.
+eject *args:
+    scripts/eject.sh {{args}}
+
 # Scan the working tree for committed secrets.
 secrets:
     gitleaks detect --no-banner --redact
